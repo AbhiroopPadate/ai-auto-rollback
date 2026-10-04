@@ -1,7 +1,9 @@
 from flask import Flask, jsonify
 import time
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 @app.route('/')
 def index():
@@ -42,7 +44,7 @@ def index():
     <body>
         <div class="container">
             <h1>AI DevOps Automatic Rollback Demo</h1>
-            <p class="version">Version: v2</p>
+            <p class="version">Version: v1</p>
             <p>Status: <span class="status">Healthy</span></p>
         </div>
     </body>
@@ -53,12 +55,11 @@ def index():
 def health():
     return jsonify({
         "status": "healthy",
-        "version": "v2"
+        "version": "v1"
     })
 
 @app.route('/api/data')
 def api_data():
-    time.sleep(3)
     return jsonify({
         "success": True,
         "data": [
@@ -68,4 +69,4 @@ def api_data():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
