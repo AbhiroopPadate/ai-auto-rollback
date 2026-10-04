@@ -97,7 +97,7 @@ def execute_rollback():
         # Overriding the APP_VERSION env var forces docker-compose to use the v2 image.
         env = os.environ.copy()
         env["APP_VERSION"] = LAST_KNOWN_GOOD_VERSION
-        subprocess.run(["docker-compose", "up", "-d", "--force-recreate", "web"], env=env, check=True)
+        subprocess.run(["docker-compose", "up", "-d", "--no-build", "--force-recreate", "web"], env=env, check=True)
         print("Rollback executed successfully!")
         
         # Wait a moment for container to start

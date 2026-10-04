@@ -5,13 +5,17 @@ Write-Host "=========================================="
 
 # Ensure both images exist before we begin
 Write-Host "`n[1/5] Building Docker images for v2 (Healthy) and v3 (Degraded)..."
-$env:APP_VERSION="v2"
-docker-compose build web
+# Check out v2 tag to build the healthy image
+git checkout v2
+docker build -t ai-auto-rollback-web:v2 .
+
+# Return to main (which contains v3 with AI capability)
+git checkout main
 $env:APP_VERSION="v3"
-docker-compose build web
+docker build -t ai-auto-rollback-web:v3 .
 
 Write-Host "`n[2/5] Deploying Degraded Version 3..."
-docker-compose up -d --force-recreate web
+docker-compose up -d --no-build --force-recreate web
 Start-Sleep -Seconds 5
 
 $health = Invoke-RestMethod http://localhost:5000/health
