@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import subprocess
 import requests
@@ -40,7 +41,7 @@ def analyze_with_ai(metrics):
     if not AI_API_KEY:
         print("Warning: AI_API_KEY environment variable not set. Using mocked AI response.")
         # Mock logic for tests and when key is not provided
-        if metrics.get("current_response_time_seconds") and metrics["current_response_time_seconds"] > 1.0:
+        if metrics.get("current_response_time_seconds") and metrics["current_response_time_seconds"] > 0.5:
             return {
                 "decision": "ROLLBACK",
                 "confidence": 0.98,
@@ -103,13 +104,24 @@ def execute_rollback():
         # Wait a moment for container to start
         time.sleep(2)
         health_resp = requests.get("http://localhost:5000/health")
-        print(f"Health check after rollback: {health_resp.json()}")
+        health_resp.raise_for_status()
+        health_data = health_resp.json()
+        print(f"Health check after rollback: {health_data}")
+        if health_data.get("version") != LAST_KNOWN_GOOD_VERSION:
+            print(f"Error: Expected version {LAST_KNOWN_GOOD_VERSION} but got {health_data.get('version')}")
+            sys.exit(1)
     except Exception as e:
         print(f"Rollback failed: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     print("Collecting metrics...")
     metrics = collect_metrics()
+    
+    if metrics.get("current_response_time_seconds") is None:
+        print("Error: Could not retrieve metrics from Prometheus. Is it running and receiving traffic?")
+        sys.exit(1)
+        
     print(f"Metrics: {json.dumps(metrics, indent=2)}")
     
     print("Asking AI for decision...")
