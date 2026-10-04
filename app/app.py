@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+import time
 
 app = Flask(__name__)
 
@@ -41,7 +42,7 @@ def index():
     <body>
         <div class="container">
             <h1>AI DevOps Automatic Rollback Demo</h1>
-            <p class="version">Version: v1</p>
+            <p class="version">Version: v2</p>
             <p>Status: <span class="status">Healthy</span></p>
         </div>
     </body>
@@ -52,11 +53,12 @@ def index():
 def health():
     return jsonify({
         "status": "healthy",
-        "version": "v1"
+        "version": "v2"
     })
 
 @app.route('/api/data')
 def api_data():
+    time.sleep(3)
     return jsonify({
         "success": True,
         "data": [
