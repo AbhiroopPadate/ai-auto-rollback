@@ -1,6 +1,7 @@
 import pytest
 import sys
 import os
+from unittest.mock import patch
 
 # Add the project root to the Python path so the app module can be imported
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -28,12 +29,14 @@ def test_health_route_json(client):
     response = client.get('/health')
     json_data = response.get_json()
     assert json_data['status'] == 'healthy'
-    assert json_data['version'] == 'v2'
+    assert json_data['version'] == 'v3'
 
-def test_api_data_route(client):
+@patch('time.sleep')
+def test_api_data_route(mock_sleep, client):
     """Test that the /api/data route returns a 200 HTTP status."""
     response = client.get('/api/data')
     assert response.status_code == 200
+    mock_sleep.assert_called_once_with(3)
 
 def test_metrics_route(client):
     """Test that the /metrics route returns a 200 HTTP status."""
@@ -45,4 +48,4 @@ def test_api_info_route(client):
     response = client.get('/api/info')
     assert response.status_code == 200
     json_data = response.get_json()
-    assert json_data['current_version'] == 'v2'
+    assert json_data['current_version'] == 'v3'
