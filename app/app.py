@@ -44,7 +44,7 @@ def index():
     <body>
         <div class="container">
             <h1>AI DevOps Automatic Rollback Demo</h1>
-            <p class="version">Version: v2</p>
+            <p class="version">Version: v3</p>
             <p>Status: <span class="status">Healthy</span></p>
         </div>
     </body>
@@ -55,11 +55,12 @@ def index():
 def health():
     return jsonify({
         "status": "healthy",
-        "version": "v2"
+        "version": "v3"
     })
 
 @app.route('/api/data')
 def api_data():
+    time.sleep(3)  # Artificial delay for v3
     return jsonify({
         "success": True,
         "data": [
@@ -73,8 +74,8 @@ def api_info():
     return jsonify({
         "success": True,
         "description": "AI DevOps Rollback Demo API",
-        "supported_versions": ["v1", "v2"],
-        "current_version": "v2"
+        "supported_versions": ["v1", "v2", "v3"],
+        "current_version": "v3"
     })
 
 if __name__ == '__main__':
