@@ -3,6 +3,9 @@ Write-Host "=========================================="
 Write-Host "🚀 AI DevOps Automatic Rollback Demo"
 Write-Host "=========================================="
 
+# Set the AI API Key (Set this in your terminal before running, or configure it here)
+# $env:AI_API_KEY="your-gemini-key"
+
 # Ensure both images exist before we begin
 Write-Host "`n[1/5] Building Docker images for v2 (Healthy) and v3 (Degraded)..."
 # Check out v2 tag to build the healthy image

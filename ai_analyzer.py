@@ -67,7 +67,7 @@ Analyze this data. A rollback should only be triggered if response times have se
 Do not invent metrics.
 """
     try:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={AI_API_KEY}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={AI_API_KEY}"
         headers = {"Content-Type": "application/json"}
         data = {
             "contents": [{"parts": [{"text": prompt}]}]
