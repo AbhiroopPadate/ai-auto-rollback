@@ -3,6 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
+    image: ai-auto-rollback-web:${APP_VERSION:-latest}
     ports:
       - "5000:5000"
     # The CMD in Dockerfile already runs python app/app.py
