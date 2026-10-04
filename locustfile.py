@@ -15,3 +15,7 @@ class FlaskLoadTestUser(HttpUser):
     @task(2)
     def api_data(self):
         self.client.get("/api/data")
+        
+    @task(1)
+    def api_info(self):
+        self.client.get("/api/info")

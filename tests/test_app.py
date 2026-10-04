@@ -28,7 +28,7 @@ def test_health_route_json(client):
     response = client.get('/health')
     json_data = response.get_json()
     assert json_data['status'] == 'healthy'
-    assert json_data['version'] == 'v1'
+    assert json_data['version'] == 'v2'
 
 def test_api_data_route(client):
     """Test that the /api/data route returns a 200 HTTP status."""
@@ -39,3 +39,10 @@ def test_metrics_route(client):
     """Test that the /metrics route returns a 200 HTTP status."""
     response = client.get('/metrics')
     assert response.status_code == 200
+
+def test_api_info_route(client):
+    """Test the new v2 /api/info route."""
+    response = client.get('/api/info')
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert json_data['current_version'] == 'v2'
